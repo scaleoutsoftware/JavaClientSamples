@@ -1,0 +1,15 @@
+update_time       0
+max_lcl_retries   30
+max_rem_retries   2
+max_access_time   0
+max_svr_conn      4
+runas_remcli      0
+br_timeout        60
+stats_interval    6
+rem_gw            soss2, 3720, 172.20.128.2, 3721
+access_mode       soss2, push
+auto_start        soss2, 1
+conn_timeout      soss2, 4
+
+
+

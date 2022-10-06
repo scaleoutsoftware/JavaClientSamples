@@ -1,0 +1,4 @@
+FROM openjdk:20
+COPY SampleApplication.jar /tmp
+WORKDIR /tmp
+ENTRYPOINT ["java", "-cp", "SampleApplication.jar", "com.scaleout.caching.sample.ExpirationListener"]

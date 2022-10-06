@@ -1,0 +1,81 @@
+version: "2.1"
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          ip_range: 172.28.5.0/24
+
+services:
+  cache:
+    build:
+      context: .
+      dockerfile: Dockerfile-cache
+    ports:
+      - "18080:8080"
+    depends_on:
+      store1:
+        condition: service_healthy
+      store2:
+        condition: service_healthy
+    networks:
+      - static-network
+
+  expiration:
+    build:
+      context: .
+      dockerfile: Dockerfile-expiration
+    ports:
+      - "19080:8080"
+    depends_on:
+      store1:
+        condition: service_healthy
+      store2:
+        condition: service_healthy
+    networks:
+      - static-network
+
+  store1:
+    build:
+      context: .
+      dockerfile: Dockerfile-store1
+    container_name: store1
+    ports:
+      - "2720:2720"
+      - "2720:2720/udp"
+      - "2721:2721"
+      - "2722:2722"
+      - "2723:2723"
+      - "2724:2724"
+    healthcheck:
+      test: ["CMD", "soss", "query"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    command: []
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.1
+
+  store2:
+    build:
+      context: .
+      dockerfile: Dockerfile-store2
+    container_name: store2
+    ports:
+      - "3720:3720"
+      - "3720:3720/udp"
+      - "3721:3721"
+      - "3722:3722"
+      - "3723:3723"
+      - "3724:3724"
+    healthcheck:
+      test: [ "CMD", "soss", "query" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    command: [ ]
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.2
