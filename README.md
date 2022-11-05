@@ -1,6 +1,6 @@
 # JavaClientSamples
  
-This repository houses samples for the Java ScaleOut client API. 
+This repository houses samples for the ScaleOut Java client API. 
 
 - SampleApplication
 	- Docker-compose sample that runs four containers 
