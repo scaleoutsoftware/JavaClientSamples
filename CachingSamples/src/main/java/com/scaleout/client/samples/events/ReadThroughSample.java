@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2022 by ScaleOut Software, Inc.
+ * (C) Copyright 2025 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -36,7 +36,7 @@ import java.net.http.HttpResponse;
 
 public class ReadThroughSample {
     public static void main(String[] args) throws Exception {
-        GridConnection connection = GridConnection.connect("bootstrapGateways=localhost:721");
+        GridConnection connection = GridConnection.connect("bootstrapGateways=server1:721,server2:721;");
         Cache<String, Double> cache = new CacheBuilder<String, Double>(connection, "example", String.class)
                 .build();
 
@@ -45,7 +45,7 @@ public class ReadThroughSample {
         ServiceEvents.setLoadObjectHandler(cache, (ticker) -> {
             System.out.printf("Retrieving price for %s.\n", ticker);
             try {
-                String requestUri = String.format("https://api.iextrading.com/1.0/stock/%s/price", ticker);
+                String requestUri = "https://api.iextrading.com/1.0/stock/" + ticker + "/price";
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(requestUri))
@@ -55,7 +55,6 @@ public class ReadThroughSample {
                 return new ValueFactoryResult<>(Double.parseDouble(response.body()));
             } catch (Exception e) {
                 // place a "tombstone" object into the store
-                //return new ValueFactoryResult<>(Double.MIN_VALUE);
                 return new ValueFactoryResult<>(null);
             }
         });

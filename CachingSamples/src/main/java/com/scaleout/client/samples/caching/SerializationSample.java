@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2022 by ScaleOut Software, Inc.
+ * (C) Copyright 2025 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -57,7 +57,7 @@ public class SerializationSample {
     }
 
     public static void main(String[] args) throws Exception {
-        GridConnection connection = GridConnection.connect("bootstrapGateways=localhost:721;");
+        GridConnection connection = GridConnection.connect("bootstrapGateways=192.168.86.125:2721;");
         Cache<String, Person> cache = new CacheBuilder<String, Person>(connection, "example", String.class)
                 // supply the custom serializer to the builder
                 .customSerialization(new ProtobufSerializer(), new ProtobufDeserializer())

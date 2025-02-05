@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2022 by ScaleOut Software, Inc.
+ * (C) Copyright 2025 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -33,7 +33,7 @@ import com.scaleout.client.caching.RequestStatus;
 
 public class LockingSample {
     public static void main(String[] args) throws Exception {
-        GridConnection connection = GridConnection.connect("bootstrapGateways=localhost:721");
+        GridConnection connection = GridConnection.connect("bootstrapGateways=server1:721,server2:721;");
         Cache<Integer, String> cache = new CacheBuilder<Integer, String>(connection, "example", Integer.class)
                 .build();
         try {

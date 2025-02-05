@@ -23,46 +23,26 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleout.client.samples.events;
+package com.scaleout.client.samples.compute;
 
+import com.scaleout.client.GridConnectException;
 import com.scaleout.client.GridConnection;
 import com.scaleout.client.ServiceEvents;
-import com.scaleout.client.caching.*;
+import com.scaleout.client.ServiceEventsException;
+import com.scaleout.client.caching.Cache;
+import com.scaleout.client.caching.CacheBuilder;
 
-import java.time.Duration;
+import java.io.IOException;
 
-public class WriteBehindSample {
-    static class PlayerStats{
-        public int wins;
-        public int losses;
-    }
-    public static void main(String[] args) throws Exception {
-        GridConnection connection = GridConnection.connect("bootstrapGateways=server1:721,server2:721;");
-        Cache<String, PlayerStats> cache = new CacheBuilder<String, PlayerStats>(connection, "example", String.class)
-                .backingStoreEventInterval(Duration.ofSeconds(5))
-                .backingStoreMode(BackingStoreMode.WriteBehind)
+public class PMIHandlerSample {
+    public static void main(String[] args) throws GridConnectException, ServiceEventsException, IOException {
+        GridConnection connection = GridConnection.connect("bootstrapGateways=localhost");
+        Cache<String, Long> cache = new CacheBuilder<String, Long>(connection, "PMISample", String.class)
                 .build();
 
-        // Inform the ScaleOut service that this client will be processing write-behind
-        // events by providing a lambda callback for the cache:
-        ServiceEvents.setStoreObjectHandler(cache, (playerId, playerStats) -> {
-            int playerWins = playerStats.wins;
-            int playerLosses = playerStats.losses;
-            // (...remainder of DB code elided.)
-
-            System.out.println("Write behind.");
-        });
-
-        // Also register a handler for erase-behind events to mark a player as 'offline'
-        // in the database upon removal from the ScaleOut cache:
-        ServiceEvents.setEraseObjectHandler(cache, (playerId) -> {
-            // UPDATE players SET status = "offline" where player_id = ...
-            System.out.println("Erase behind.");
-        });
-
+        ServiceEvents.setForEachEventHandler(cache, "Find inactive users", new FindInactiveUsersForEachHandler());
         System.out.println("Waiting for events...");
         System.out.println("Press any key to exit.");
         System.in.read();
     }
 }
-
