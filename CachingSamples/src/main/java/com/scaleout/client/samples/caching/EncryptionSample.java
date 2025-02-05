@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2022 by ScaleOut Software, Inc.
+ * (C) Copyright 2025 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
@@ -123,7 +123,7 @@ public class EncryptionSample {
     }
 
     public static void main(String[] args) throws Exception {
-        GridConnection connection = GridConnection.connect("bootstrapGateways=localhost:721");
+        GridConnection connection = GridConnection.connect("bootstrapGateways=server1:721,server2:721;");
         Cache<String, SimpleObject> cache = new CacheBuilder<String, SimpleObject>(connection, "example", String.class)
                 // supply the custom serializer to the builder
                 .customSerialization(new SimpleObjectEncryptingSerializer(), new SimpleObjectDecryptingDeserializer())

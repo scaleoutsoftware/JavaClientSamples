@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2022 by ScaleOut Software, Inc.
+ * (C) Copyright 2025 by ScaleOut Software, Inc.
  *
  * LICENSE AND DISCLAIMER
  * ----------------------
