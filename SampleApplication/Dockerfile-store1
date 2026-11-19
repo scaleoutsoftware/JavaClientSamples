@@ -1,5 +1,4 @@
 FROM scaleout/soss:latest
-COPY sp_1.txt /usr/local/soss5/soss_params.txt
-COPY scp_1.txt /usr/local/soss/soss_client_params.txt
-WORKDIR /usr/local/soss5
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+COPY --chown=scaleout:root sp_1.txt /usr/local/soss/soss_params.txt
+COPY --chown=scaleout:root scp_1.txt /usr/local/soss/soss_client_params.txt
+EXPOSE 2720/tcp 2720/udp 2721/tcp 2722/tcp 2723/tcp 2724/tcp 4000/tcp 4001/tcp
